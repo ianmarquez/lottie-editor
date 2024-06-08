@@ -1,40 +1,77 @@
 import express from 'express'
 
+import StatusCodes from 'http-status-codes'
 import validateData from '../middleware/validationMiddleware'
-import { createUser, findUserById } from './user.service'
-import { userMutateSchema } from './user.schema'
+import { userRegisterSchema, userUpdateSchema } from './user.schema'
+import {
+  createUser,
+  deleteUserById,
+  findUserById,
+  getAllUsers,
+  updateUserByEmail,
+} from './user.service'
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.send('user list')
+router.get('/', async (req, res) => {
+  try {
+    const users = await getAllUsers()
+    users.forEach((user) => {
+      delete user.password
+    })
+    res.json(users)
+  } catch (error) {
+    console.error(error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
+  }
 })
 
-router.post('/', validateData(userMutateSchema), async (req, res) => {
+router.post('/', validateData(userRegisterSchema), async (req, res) => {
   const body = req.body
   try {
-    body.delete('passwordConfirm')
-    console.log(body)
+    delete body.passwordConfirm
     const newUser = await createUser(body)
+    delete newUser.password
     res.json(newUser)
   } catch (error) {
-    res.send(error).status(500)
+    console.error(error)
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
   }
 })
 
 router
   .route('/:id')
-  .get(async (req, res) => {})
-  .put((req, res) => {
-    res.send(`update user with ${req.params.id}`)
+  .get(async (req, res) => {
+    const id = req.params.id
+    const user = await findUserById(parseInt(id))
+    if (!user) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .send(`User with id:${id} not found`)
+    }
+    return res.json(user)
   })
-  .delete((req, res) => {
-    res.send(`delete user with ${req.params.id}`)
+  .put(validateData(userUpdateSchema), async (req, res) => {
+    const body = req.body
+    const id = parseInt(req.params.id)
+    try {
+      const user = await updateUserByEmail(body, id)
+      delete user.password
+      res.json(user)
+    } catch (error) {
+      console.log(error)
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
+    }
   })
-
-router.param('id', (req, res, next, id) => {
-  // run something
-  next()
-})
+  .delete(async (req, res) => {
+    const id = req.params.id
+    const user = await deleteUserById(parseInt(id))
+    if (!user) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .send(`User with id:${id} not found`)
+    }
+    return res.status(StatusCodes.ACCEPTED)
+  })
 
 export default router

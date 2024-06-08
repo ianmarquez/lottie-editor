@@ -8,7 +8,6 @@ const validateData = (
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       schema.parse(req.body)
-      console.log('parsed')
       next()
     } catch (error) {
       if (error instanceof ZodError) {

@@ -9,6 +9,10 @@ type User = {
   email: string
 }
 
+export const getAllUsers = () => {
+  return db.user.findMany()
+}
+
 export const createUser = (user: User) => {
   const createBody = { ...user }
   createBody.password = crypto
@@ -39,11 +43,12 @@ export const findUserById = (id: number) =>
 export const findUserByEmail = (email: string) =>
   db.user.findUnique({ where: { email } })
 
-export const updateUserByEmail = (user: User) => {
+export const updateUserByEmail = (user: User, id: number) => {
   return db.user.update({
     data: user,
     where: {
       email: user.email,
+      id,
     },
   })
 }
