@@ -16,7 +16,7 @@ model User {
   updatedAt        DateTime           @default(now())
   firstName        String
   lastName         String
-  birthday         DateTime
+  email            String             @unique
   password         String
   Workspace        Workspace[]
   WorkspaceMembers WorkspaceMembers[]
