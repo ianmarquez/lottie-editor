@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int                @id @default(autoincrement())
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  firstName        String
+  lastName         String
+  birthday         DateTime
+  password         String
+  Workspace        Workspace[]
+  WorkspaceMembers WorkspaceMembers[]
+}
+
+model Workspace {
+  id               Int                @id @default(autoincrement())
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  name             String
+  owner            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           Int
+  WorkspaceMembers WorkspaceMembers[]
+}
+
+model WorkspaceMembers {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId Int
+}
+
+model LottieFile {
+  id              Int               @id @default(autoincrement())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  content         Json
+  LottieFileLayer LottieFileLayer[]
+}
+
+model LottieFileLayer {
+  id           Int        @id @default(autoincrement())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @default(now())
+  content      Json
+  parent       LottieFile @relation(fields: [lottieFileId], references: [id], onDelete: Cascade)
+  lottieFileId Int
+}
