@@ -1,13 +1,6 @@
 import { db } from '../config/db.server'
+import { User } from '@prisma/client'
 import crypto from 'crypto'
-
-type User = {
-  firstName: string
-  lastName: string
-  birthday: Date
-  password: string
-  email: string
-}
 
 export const getAllUsers = () => {
   return db.user.findMany()

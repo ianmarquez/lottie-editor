@@ -1,6 +1,6 @@
 import express from 'express'
-
 import StatusCodes from 'http-status-codes'
+
 import validateData from '../middleware/validationMiddleware'
 import { userRegisterSchema, userUpdateSchema } from './user.schema'
 import {
@@ -10,10 +10,11 @@ import {
   getAllUsers,
   updateUserByEmail,
 } from './user.service'
+import { createWorkspace } from '../workspace/workspace.service'
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
+router.get('/', async (_, res) => {
   try {
     const users = await getAllUsers()
     users.forEach((user) => {
@@ -32,6 +33,10 @@ router.post('/', validateData(userRegisterSchema), async (req, res) => {
     delete body.passwordConfirm
     const newUser = await createUser(body)
     delete newUser.password
+    await createWorkspace({
+      name: `${newUser.firstName}'s Workspace`,
+      userId: newUser.id,
+    })
     res.json(newUser)
   } catch (error) {
     console.error(error)
@@ -53,8 +58,8 @@ router
   })
   .put(validateData(userUpdateSchema), async (req, res) => {
     const body = req.body
-    const id = parseInt(req.params.id)
     try {
+      const id = parseInt(req.params.id)
       const user = await updateUserByEmail(body, id)
       delete user.password
       res.json(user)
@@ -65,13 +70,14 @@ router
   })
   .delete(async (req, res) => {
     const id = req.params.id
-    const user = await deleteUserById(parseInt(id))
-    if (!user) {
+    try {
+      await deleteUserById(parseInt(id))
+      return res.status(StatusCodes.ACCEPTED).send()
+    } catch (err) {
       return res
         .status(StatusCodes.NOT_FOUND)
-        .send(`User with id:${id} not found`)
+        .send(`User with id ${id} not found`)
     }
-    return res.status(StatusCodes.ACCEPTED)
   })
 
 export default router

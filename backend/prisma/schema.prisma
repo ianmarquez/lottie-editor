@@ -30,6 +30,7 @@ model Workspace {
   owner            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           Int
   WorkspaceMembers WorkspaceMembers[]
+  LottieFile       LottieFile[]
 }
 
 model WorkspaceMembers {
@@ -47,7 +48,9 @@ model LottieFile {
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @default(now())
   content         Json
+  workspace       Workspace         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   LottieFileLayer LottieFileLayer[]
+  workspaceId     Int
 }
 
 model LottieFileLayer {
