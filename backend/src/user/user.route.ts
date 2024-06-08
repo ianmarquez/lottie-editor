@@ -11,6 +11,7 @@ import {
   updateUserByEmail,
 } from './user.service'
 import { createWorkspace } from '../workspace/workspace.service'
+import { createWorkspaceMember } from '../workspace-members/workspace-members.service'
 
 const router = express.Router()
 
@@ -33,9 +34,13 @@ router.post('/', validateData(userRegisterSchema), async (req, res) => {
     delete body.passwordConfirm
     const newUser = await createUser(body)
     delete newUser.password
-    await createWorkspace({
+    const workSpace = await createWorkspace({
       name: `${newUser.firstName}'s Workspace`,
       userId: newUser.id,
+    })
+    await createWorkspaceMember({
+      userId: newUser.id,
+      workspaceId: workSpace.id,
     })
     res.json(newUser)
   } catch (error) {

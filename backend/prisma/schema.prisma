@@ -41,6 +41,8 @@ model WorkspaceMembers {
   userId      Int
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workspaceId Int
+
+  @@unique([userId, workspaceId])
 }
 
 model LottieFile {
