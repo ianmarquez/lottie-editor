@@ -1,27 +1,20 @@
 import { create } from "zustand";
 
-const LAYERS = {
-  MAIN_LAYER: "MAIN_LAYER",
-} as const;
-
-export type LayerTypes = (typeof LAYERS)[keyof typeof LAYERS];
-
 type State = {
-  selectedLayer: LayerTypes;
-  idx?: number;
+  selectedLayer: number;
 };
 
 const initialState: State = {
-  selectedLayer: LAYERS.MAIN_LAYER,
+  selectedLayer: 0,
 };
 
 type Actions = {
-  setSelectedLayer: (newLayer: LayerTypes) => void;
+  setSelectedLayer: (newLayer: number) => void;
 };
 
-export const useLoadingStore = create<State & Actions>((set) => ({
+export const useSelectedLayer = create<State & Actions>((set) => ({
   ...initialState,
-  setSelectedLayer: (newSelectedLayer: LayerTypes) => {
+  setSelectedLayer: (newSelectedLayer: number) => {
     set({ selectedLayer: newSelectedLayer });
   },
 }));

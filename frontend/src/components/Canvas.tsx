@@ -24,7 +24,7 @@ export default function Canvas() {
     return () => {
       clearInterval(progressBarInterval);
     };
-  }, [lottieRef]);
+  }, [lottieRef, lottie]);
 
   return (
     <div className="flex flex-col items-center justify-center flex-grow w-full">
