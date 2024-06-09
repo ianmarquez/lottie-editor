@@ -9,6 +9,7 @@ type AccordionItemProps = PropsWithChildren<{
   canDelete?: boolean;
   onClick: (index: number, nextState: boolean) => void;
   onDelete?: (index: number) => void;
+  disabled?: boolean;
 }>;
 
 export default function AccordionItem(props: AccordionItemProps) {
@@ -21,8 +22,12 @@ export default function AccordionItem(props: AccordionItemProps) {
       )}
     >
       <div
-        className="text-xl font-medium flex flex-row justify-between p-4"
+        className={cn(
+          "text-xl font-medium flex flex-row justify-between p-4",
+          props.disabled ? "cursor-not-allowed" : "cursor-pointer",
+        )}
         onClick={() => {
+          if (props.disabled) return;
           const nextState = !props.open;
           props.onClick(props.index, nextState);
         }}
