@@ -9,7 +9,8 @@ type LayersProps = {
 };
 
 export default function Layers(props: LayersProps) {
-  const { lottie, setLottie } = useLottieStore();
+  const type = props.layer.shapes[0].path.split(".")[0];
+  const { deleteLayer } = useLottieStore();
   const { selectedLayer, setSelectedLayer } = useSelectedLayer();
   const onLayerClick = (index: number, nextState: boolean) => {
     if (nextState) {
@@ -19,14 +20,10 @@ export default function Layers(props: LayersProps) {
     }
   };
 
-  function onDelete(index: number) {
+  function onDelete() {
     setSelectedLayer(0);
-    const newLottieFiles = { ...lottie };
-    const layers = newLottieFiles.layers.filter(
-      (layer: any) => layer.ind !== index,
-    );
-    newLottieFiles.layers = layers;
-    setLottie(newLottieFiles);
+    deleteLayer(props.layer.shapes[0].path);
+    console.log(type);
   }
 
   return (
@@ -35,7 +32,7 @@ export default function Layers(props: LayersProps) {
       index={props.index}
       header={`${props.layer.name}`}
       onClick={onLayerClick}
-      canDelete
+      canDelete={type === "layers"}
       onDelete={onDelete}
     >
       {props.layer.shapes.map((shape: any, idx: number) => (
