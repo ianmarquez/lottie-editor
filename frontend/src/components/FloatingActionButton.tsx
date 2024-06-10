@@ -36,7 +36,7 @@ export default function FloatingActionButton() {
   const { lottie } = useLottieStore();
 
   return (
-    <div className="fixed bottom-10 right-10  dropdown dropdown-top dropdown-end">
+    <div className="fixed bottom-20 right-5 dropdown dropdown-top dropdown-end">
       <div
         tabIndex={0}
         role="button"

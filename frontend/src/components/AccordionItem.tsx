@@ -43,7 +43,7 @@ export default function AccordionItem(props: AccordionItemProps) {
           {props.children}
           {!!props.canDelete && !!props.onDelete && (
             <button
-              className="btn btn-error text-white"
+              className="mt-5 btn btn-error text-white"
               onClick={() => props.onDelete?.(props.index)}
             >
               Delete <FiTrash2 size={24} />

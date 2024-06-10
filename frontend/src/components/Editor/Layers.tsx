@@ -1,7 +1,3 @@
-import { useEffect, useState } from "react";
-import _ from "lodash";
-import traverse from "traverse";
-
 import { useSelectedLayer } from "../../store/editor";
 import { useLottieStore } from "../../store/lottie";
 import AccordionItem from "../AccordionItem";
@@ -9,12 +5,12 @@ import ColorField from "./ColorField";
 
 type LayersProps = {
   layer: any;
+  index: number;
 };
 
 export default function Layers(props: LayersProps) {
   const { lottie, setLottie } = useLottieStore();
   const { selectedLayer, setSelectedLayer } = useSelectedLayer();
-  const [fills, setFills] = useState<any[]>([]);
   const onLayerClick = (index: number, nextState: boolean) => {
     if (nextState) {
       setSelectedLayer(index);
@@ -33,30 +29,17 @@ export default function Layers(props: LayersProps) {
     setLottie(newLottieFiles);
   }
 
-  useEffect(() => {
-    const _fills: any[] = [];
-    traverse(props.layer).forEach((leaf) => {
-      if (["fl", "st", "gf", "gs"].indexOf(leaf.ty) > 0) {
-        _fills.push(leaf);
-      }
-    });
-    setFills(_fills);
-  }, []);
-
-  if (fills.length === 0) return null;
-
-  console.log(props.layer.shapes);
   return (
     <AccordionItem
-      open={selectedLayer === props.layer.ind}
-      index={props.layer.ind}
-      header={`${props.layer.nm}(${props.layer.ind})`}
+      open={selectedLayer === props.index}
+      index={props.index}
+      header={`${props.layer.name}`}
       onClick={onLayerClick}
       canDelete
       onDelete={onDelete}
     >
-      {fills.map((fill, idx) => (
-        <ColorField fill={fill} key={idx} />
+      {props.layer.shapes.map((shape: any, idx: number) => (
+        <ColorField shape={shape} key={idx} />
       ))}
     </AccordionItem>
   );
