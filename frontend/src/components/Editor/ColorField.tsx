@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
 import _ from "lodash";
+import { useState } from "react";
 import { RgbaColor, RgbaColorPicker } from "react-colorful";
-import { useLottieStore } from "../../store/lottie";
 import { FiX } from "react-icons/fi";
+import { useLottieStore } from "../../store/lottie";
 
 function Color(props: {
   color: number[];
@@ -16,10 +16,6 @@ function Color(props: {
     props.onUpdate([r, g, b, a], props.path);
   }, 50);
 
-  useEffect(() => {
-    console.log(isVisible);
-  }, [isVisible]);
-
   return (
     <div className="flex flex-col gap-2 relative">
       {isVisible && (
@@ -29,7 +25,6 @@ function Color(props: {
             onClick={(e) => {
               e.stopPropagation();
               setIsVisible(false);
-              console.log("clicked", isVisible);
             }}
           >
             <FiX />

@@ -12,11 +12,11 @@ function UploadModal() {
   return (
     <>
       <button
-        className="btn btn-circle w-24 h-24 btn-secondary"
+        className="btn btn-circle w-20 h-20 btn-secondary"
         onClick={() => modalRef?.current?.showModal()}
       >
         <div className="w-full h-full rounded-full flex flex-col justify-center items-center">
-          <FiFile size={30} />
+          <FiFile size={24} />
         </div>
       </button>
       <dialog
@@ -35,13 +35,14 @@ function UploadModal() {
 export default function FloatingActionButton() {
   const { lottie } = useLottieStore();
 
+  if (!lottie) return;
   return (
     <div className="fixed bottom-20 right-5 dropdown dropdown-top dropdown-end">
       <div
         tabIndex={0}
         role="button"
         className={cn(
-          "btn m-1 btn-circle w-24 h-24 bg-primary text-zinc-700",
+          "btn m-1 btn-circle w-20 h-20 bg-primary text-zinc-700",
           "hover:text-white duration-300",
           lottie && "hover:bg-secondary",
         )}

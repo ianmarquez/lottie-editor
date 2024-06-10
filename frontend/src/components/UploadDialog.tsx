@@ -17,7 +17,6 @@ export default function UploadDialog() {
       if (!event || !event.target) return;
       const result = event.target.result as string;
       const uploadedLottie = JSON.parse(result);
-      console.log(uploadedLottie);
       setLottie(uploadedLottie);
       setLoading(false);
     };
