@@ -1,1 +1,0 @@
-import XXH from "xxhashjs";

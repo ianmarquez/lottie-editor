@@ -15,11 +15,6 @@ export default function MainLayer() {
   };
   if (!lottie) return null;
 
-  function onFrameRateChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    const newLottie = { ...lottie };
-    newLottie.fr = e.target.value;
-    setLottie(newLottie);
-  }
   function onWidthChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newLottie = { ...lottie };
     newLottie.w = e.target.value;
@@ -41,30 +36,25 @@ export default function MainLayer() {
       onClick={onLayerClick}
     >
       <h1 className="text-primary font-semibold text-4xl">Globals</h1>
-      <label className="input input-bordered flex items-center gap-2">
-        Frame Rate
-        <input
-          onChange={onFrameRateChanged}
-          type="number"
-          className="grow"
-          defaultValue={rest.fr}
-        />
-      </label>
-      <label className="input input-bordered flex items-center gap-2">
-        Width
+      <label className="form-control w-full max-w-xs">
+        <div className="label">
+          <span className="label-text">Width</span>
+        </div>
         <input
           onChange={onWidthChange}
           type="number"
-          className="grow"
+          className="grow input input-bordered w-full max-w-xs"
           defaultValue={rest.w}
         />
       </label>
-      <label className="input input-bordered flex items-center gap-2">
-        Height
+      <label className="form-control w-full max-w-xs">
+        <div className="label">
+          <span className="label-text">Height</span>
+        </div>
         <input
           onChange={onHeightChange}
           type="number"
-          className="grow"
+          className="grow input input-bordered w-full max-w-xs"
           defaultValue={rest.h}
         />
       </label>

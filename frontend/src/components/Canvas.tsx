@@ -5,13 +5,22 @@ import { FiPause, FiPlay } from "react-icons/fi";
 import { AnimationItem } from "lottie-web";
 
 export default function Canvas() {
-  const { lottie } = useLottieStore();
+  const { lottie, speed, changeSpeed } = useLottieStore();
   const lottieRef = useRef<AnimationItem>();
   const [currentFrame, setCurrentFrame] = useState<number>(lottie?.ip | 0);
   let duration = 0;
   const [play, setPlay] = useState(true);
 
   if (!lottie) return;
+
+  function onSpeedIncrease() {
+    if (!lottie) return;
+    let newSpeed = speed * 2;
+    if (newSpeed > 16) {
+      newSpeed = 1;
+    }
+    changeSpeed(newSpeed, lottie.fr);
+  }
 
   useEffect(() => {
     if (!lottieRef.current) return;
@@ -43,6 +52,13 @@ export default function Canvas() {
           onClick={() => setPlay((prevState) => !prevState)}
         >
           {play ? <FiPause size={24} /> : <FiPlay size={24} />}
+        </button>
+
+        <button
+          className="btn btn-circle btn-outline text-white flex flex-col justify-center items-center"
+          onClick={() => onSpeedIncrease()}
+        >
+          {speed}x
         </button>
 
         <progress

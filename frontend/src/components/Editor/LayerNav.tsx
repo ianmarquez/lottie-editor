@@ -1,9 +1,9 @@
 // @ts-ignore
-import LottieWebParser from "lottie-web-parser";
 import { useEffect, useState } from "react";
 import { useLottieStore } from "../../store/lottie";
-import MainLayer from "./MainLayer";
+import { parseColors } from "../../utils/LottieParser";
 import Layers from "./Layers";
+import MainLayer from "./MainLayer";
 
 export default function LayerNav() {
   const { lottie } = useLottieStore();
@@ -11,7 +11,7 @@ export default function LayerNav() {
 
   useEffect(() => {
     if (!lottie) return;
-    const _layers = LottieWebParser.parseColors(lottie);
+    const _layers = parseColors(lottie);
     setLayers(_layers.filter((layer: any) => layer.shapes.length > 0));
   }, [lottie]);
 
