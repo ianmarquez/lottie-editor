@@ -1,17 +1,19 @@
 import dotenv from 'dotenv'
+import cors from 'cors'
 import express from 'express'
 
 import logger from './middleware/logger'
-
 import V1Router from './routes/v1router'
+import corsMiddleware from './middleware/corsMiddleware'
 
+const port = process.env.PORT
 dotenv.config()
 
 const app = express()
-const port = process.env.PORT
 
 if (!port) process.exit(1)
 
+app.use(corsMiddleware)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(logger)
